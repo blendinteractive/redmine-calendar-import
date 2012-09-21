@@ -1,0 +1,23 @@
+<p>
+  <b>User:</b>
+  <%=h @processed_result.user_id %>
+</p>
+
+<p>
+  <b>User Calendar:</b>
+  <%=h @processed_result.user_calendar_id %>
+</p>
+
+<p>
+  <b>Time entry:</b>
+  <%=h @processed_result.time_entry_id %>
+</p>
+
+<p>
+  <b>Processed:</b>
+  <%=h @processed_result.processed %>
+</p>
+
+
+<%= link_to 'Edit', edit_processed_result_path(@processed_result) %> |
+<%= link_to 'Back', processed_results_path %>

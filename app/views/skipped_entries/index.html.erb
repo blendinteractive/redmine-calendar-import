@@ -1,0 +1,20 @@
+<h1>Listing skipped_entries</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Project</th>
+    <th>Start date</th>
+    <th>Text that was skipped</th>
+  </tr>
+
+<% for skipped_entry in @skipped_entries %>
+  <tr>
+    <td><%=h User.find(skipped_entry.user_id).firstname %></td>
+    <td><%=h skipped_entry.summary %></td>
+    <td><%=h skipped_entry.start_date %></td>
+    <td><%=h skipped_entry.skipped_text %></td>
+    <td><%= link_to 'Show', skipped_entry %></td>
+  </tr>
+<% end %>
+</table>

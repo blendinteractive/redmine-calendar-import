@@ -1,0 +1,27 @@
+<% if skipped_entries.any? %>
+
+<div class="flash error">You'll want to verify that none of these items will effect your billing.</div>
+<h1>Events that weren't pulled into Redmine</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Project</th>
+    <th>Start date</th>
+    <th>Text that was skipped</th>
+  </tr>
+
+<% for skipped_entry in skipped_entries %>
+  <tr>
+    <td><%=h User.find(skipped_entry.user_id).firstname %></td>
+    <td><%=h skipped_entry.summary %></td>
+    <td><%=h skipped_entry.start_date %></td>
+    <td><%=h skipped_entry.skipped_text %></td>
+    <td><%= link_to 'Show', skipped_entry %></td>
+  </tr>
+<% end %>
+</table>
+
+<% else %>
+<div class="flash notice">No Skipped Entries!</div>
+<% end %>

@@ -1,0 +1,34 @@
+<p>
+  <b>User:</b>
+  <%=h @script_created_issue.user_id %>
+</p>
+
+<p>
+  <b>User Calendar ID:</b>
+  <%=h @script_created_issue.user_calendar_id %>
+</p>
+
+<p>
+  <b>Project ID:</b>
+  <%=h @script_created_issue.project_id %>
+</p>
+
+<p>
+  <b>Issue:</b>
+  <%=h @script_created_issue.issue_id %>
+</p>
+
+<p>
+  <b>Event guid:</b>
+  <%=h @script_created_issue.event_guid %>
+</p>
+
+<p>
+  <b>New Issue:</b>
+  <%=h @script_created_issue.new_issue_id %>
+</p>
+
+
+
+<%= link_to 'Edit', edit_script_created_issue_path(@script_created_issue) %> |
+<%= link_to 'Back', script_created_issues_path %>

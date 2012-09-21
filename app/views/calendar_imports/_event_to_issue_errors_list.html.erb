@@ -1,0 +1,24 @@
+<% if event_to_issue_errors.any? %>
+<div class="flash error">You'll need to resolve these errors by editing your calendar entries through the system you used to enter them.  The details on this page will help you find the items you are looking for.</div>
+
+<table class="list">
+<thead>
+  <tr>
+    <th>Project</th>
+    <th>Error</th>
+    <th></th>
+  </tr>
+</thead>
+
+<% for event_to_issue_error in event_to_issue_errors %>
+  <tr title="Date: <%=h event_to_issue_error.start_date.strftime('%m-%d-%Y %I:%M:%S %p %Z') %>" >
+    <td><%=h event_to_issue_error.summary %></td>
+    <td><%=h Error.find(event_to_issue_error.error_id).description %></td>
+    <td width="60px"><%= link_to 'See Details', event_to_issue_error %></td>
+  </tr>
+<% end %>
+</table>
+
+<% else %>
+<div class="flash notice">No Errors!</div>
+<% end %>

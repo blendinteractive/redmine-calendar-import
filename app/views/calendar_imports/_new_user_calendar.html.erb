@@ -1,0 +1,31 @@
+<br />
+<%= error_messages_for :user_calendar %>
+
+<% remote_form_for(user_calendar, :update=>'user_calendars') do |f| %>
+    <%= f.hidden_field :user_id %>
+
+
+<table>
+    <tr>
+        <td>
+            <b>Calendar Name</b><br />
+            <%= f.text_field :name %></td>
+        <td>
+            <b>ICS File URL</b><br />
+            <%= f.text_field :ics_file %></td>
+    </tr>
+    <tr>
+        <td>
+            <b>HTTP User</b><br />
+            <%= f.text_field :http_user %></td>
+        <td>
+            <b>HTTP Password</b><br />
+            <%= f.text_field :http_password %></td>
+    </tr>
+</table>
+
+  <p>
+    <%= f.submit "Add" %>
+  </p>
+<% end %>
+

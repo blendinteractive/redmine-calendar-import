@@ -1,0 +1,30 @@
+<h1>Listing script_created_issues</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>User Calendar ID</th>
+    <th>Project ID</th>
+    <th>Issue</th>
+    <th>Event guid</th>
+    <th>New Issue</th>
+  </tr>
+
+<% for script_created_issue in @script_created_issues %>
+  <tr>
+    <td><%=h script_created_issue.user_id %></td>
+    <td><%=h script_created_issue.user_calendar_id %></td>
+    <td><%=h script_created_issue.project_id %></td>
+    <td><%=h script_created_issue.issue_id %></td>
+    <td><%=h script_created_issue.event_guid %></td>
+    <td><%=h script_created_issue.new_issue_id %></td>
+    <td><%= link_to 'Show', script_created_issue %></td>
+    <td><%= link_to 'Edit', edit_script_created_issue_path(script_created_issue) %></td>
+    <td><%= link_to 'Destroy', script_created_issue, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New script_created_issue', new_script_created_issue_path %>

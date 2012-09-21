@@ -1,0 +1,30 @@
+
+<p>
+  <b>Calendar:</b>
+  <%=h UserCalendar.find(@skipped_entry.calendar_id).name %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=h @skipped_entry.start_date.strftime('%m-%d-%Y %I:%M:%S %p %Z') %>
+</p>
+
+<p>
+  <b>Project:</b>
+  <%=h @skipped_entry.summary %>
+</p>
+
+
+<p>
+  <b>Description:</b>
+  <%= simple_format(@skipped_entry.description) %>
+</p>
+
+<p>
+  <b>Text that was skipped:</b>
+  <%= simple_format(@skipped_entry.skipped_text) %>
+</p>
+
+
+
+<%= link_to 'Back', :controller=>'calendar_imports', :action=>'index' %>

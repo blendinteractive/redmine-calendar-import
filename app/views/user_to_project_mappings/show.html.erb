@@ -1,0 +1,24 @@
+<p>
+  <b>User:</b>
+  <%=h @user_to_project_mapping.user_id %>
+</p>
+
+<p>
+  <b>Project:</b>
+  <%=h @user_to_project_mapping.project_id %>
+</p>
+
+<p>
+  <b>Project alias:</b>
+  <%=h @user_to_project_mapping.project_alias %>
+</p>
+
+<p>
+  <b>Event Guid:</b>
+  <%=h @user_to_project_mapping.event_guid %>
+</p>
+
+
+
+<%= link_to 'Edit', edit_user_to_project_mapping_path(@user_to_project_mapping) %> |
+<%= link_to 'Back', user_to_project_mappings_path %>

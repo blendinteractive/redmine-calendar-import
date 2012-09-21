@@ -1,0 +1,44 @@
+<% if user_to_project_mappings.any? %>
+
+    <table class="list">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Project alias</th>
+        <th>Single Event</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <% for user_to_project_mapping in user_to_project_mappings %>
+        <% if Project.exists?(user_to_project_mapping.project_id) %>
+            <tr>
+            <td><%=h Project.find(user_to_project_mapping.project_id).name %></td>
+            <td><%=h user_to_project_mapping.project_alias %></td>
+            <td><% if !user_to_project_mapping.event_guid.nil?
+                        if user_to_project_mapping.event_guid!=''%>
+                
+                        X
+                <%      end
+                    end %></td>
+            <td><%= link_to 'Edit', edit_user_to_project_mapping_path(user_to_project_mapping, :event_guid => user_to_project_mapping.event_guid) %></td>
+            <td><%= link_to 'Remove', user_to_project_mapping, :confirm => 'Are you sure?', :method => :delete %></td>
+            </tr>
+        <% else %>
+         <tr style="background-color: #FFE3E3;" >
+            <td>INVALID MAPPING!</td>
+            <td><%=h user_to_project_mapping.project_alias %></td>
+            <td></td>
+            <td></td>
+            <td><%= link_to 'Remove', user_to_project_mapping, :confirm => 'Are you sure?', :method => :delete %></td>
+         </tr>
+        <% end %>
+    <% end %>
+    </table>
+<% else %>
+    <div>You currently don't have any projects aliased.</div>
+<% end %>
+
+    <%= link_to 'Create a New Alias', new_user_to_project_mapping_path %>
+    

@@ -1,0 +1,31 @@
+<h1>New user_calendar</h1>
+
+<%= error_messages_for :user_calendar %>
+
+<% form_for(@user_calendar) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>Ics file</b><br />
+    <%= f.text_field :ics_file %>
+  </p>
+
+  <p>
+    <b>HTTP User</b><br />
+    <%= f.text_field :http_user %>
+  </p>
+
+  <p>
+    <b>HTTP Password</b><br />
+    <%= f.text_field :http_password %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', :controller=>'calendar_imports', :action=>'index' %>

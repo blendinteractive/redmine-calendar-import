@@ -1,0 +1,17 @@
+== Calendar Import plugin
+
+This to allow users to create time entries and issues directly from the calendar system they are using.
+
+
+Calendar Syntax:
+
+Requirements: may not use the same issue id twice in one description.
+
+Summary will include: [Project Name]
+
+Description will include
+#[issue id] [Comment]
+.
+.
+.
+#*[unique identifier (if more than one)] Title: [Description]

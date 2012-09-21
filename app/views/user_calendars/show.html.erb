@@ -1,0 +1,18 @@
+<p>
+  <b>Calendar Name:</b>
+  <%=h @user_calendar.name %>
+</p>
+
+<p>
+  <b>ICS file:</b>
+  <%=h @user_calendar.ics_file %>
+</p>
+
+<p>
+  <b>HTTP User:</b>
+  <%=h @user_calendar.http_user %>
+</p>
+
+
+<%= link_to 'Back', :controller=>'calendar_imports', :action=>'index' %>
+

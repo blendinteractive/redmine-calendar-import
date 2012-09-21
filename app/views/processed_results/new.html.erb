@@ -1,0 +1,31 @@
+<h1>New processed_result</h1>
+
+<%= error_messages_for :processed_result %>
+
+<% form_for(@processed_result) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>User Calendar</b><br />
+    <%= f.text_field :user_calendar_id %>
+  </p>
+
+  <p>
+    <b>Time entry</b><br />
+    <%= f.text_field :time_entry_id %>
+  </p>
+
+  <p>
+    <b>Processed</b><br />
+    <%= f.text_field :processed %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', processed_results_path %>

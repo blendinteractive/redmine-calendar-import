@@ -1,0 +1,26 @@
+<h1>Listing processed_results</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>User Calendar</th>
+    <th>Time entry</th>
+    <th>Processed</th>
+  </tr>
+
+<% for processed_result in @processed_results %>
+  <tr>
+    <td><%=h processed_result.user_id %></td>
+    <td><%=h processed_result.user_calendar_id %></td>
+    <td><%=h processed_result.time_entry_id %></td>
+    <td><%=h processed_result.processed %></td>
+    <td><%= link_to 'Show', processed_result %></td>
+    <td><%= link_to 'Edit', edit_processed_result_path(processed_result) %></td>
+    <td><%= link_to 'Destroy', processed_result, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New processed_result', new_processed_result_path %>

@@ -1,0 +1,41 @@
+<h1>New script_created_issue</h1>
+
+<%= error_messages_for :script_created_issue %>
+
+<% form_for(@script_created_issue) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>User Calendar ID</b><br />
+    <%= f.text_field :user_calendar_id %>
+  </p>
+
+  <p>
+    <b>Project ID</b><br />
+    <%= f.text_field :project_id %>
+  </p>
+
+  <p>
+    <b>Issue</b><br />
+    <%= f.text_field :issue_id %>
+  </p>
+
+  <p>
+    <b>Event guid</b><br />
+    <%= f.text_field :event_guid %>
+  </p>
+
+  <p>
+    <b>New Issue</b><br />
+    <%= f.text_field :new_issue_id %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', script_created_issues_path %>

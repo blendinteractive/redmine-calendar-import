@@ -1,0 +1,57 @@
+<h1>Editing event_to_issue_error</h1>
+
+<%= error_messages_for :event_to_issue_error %>
+
+<% form_for(@event_to_issue_error) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>Calendar</b><br />
+    <%= f.text_field :calendar_id %>
+  </p>
+
+  <p>
+    <b>Event guid</b><br />
+    <%= f.text_field :event_guid %>
+  </p>
+
+  <p>
+    <b>Start date</b><br />
+    <%= f.date_select :start_date %>
+  </p>
+
+  <p>
+    <b>End date</b><br />
+    <%= f.date_select :end_date %>
+  </p>
+
+  <p>
+    <b>Issue</b><br />
+    <%= f.text_field :issue_id %>
+  </p>
+
+  <p>
+    <b>Error</b><br />
+    <%= f.text_field :error_id %>
+  </p>
+
+  <p>
+    <b>Summary</b><br />
+    <%= f.text_area :summary %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_area :description %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @event_to_issue_error %> |
+<%= link_to 'Back', event_to_issue_errors_path %>

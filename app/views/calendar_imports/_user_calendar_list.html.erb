@@ -1,0 +1,26 @@
+<div id="user_calendars">
+    <table class="list">
+    <thead>
+      <tr>
+        <th>Calendar Name</th>
+        <th>ICS File URL</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <% for user_calendar in user_calendars %>
+      <tr title="<%=h user_calendar.ics_file %>">
+        <td><%=h user_calendar.name %></td>
+        <td>
+            <% unless user_calendar.ics_file.slice(-30,30).nil? %>
+                <%=h '...'+user_calendar.ics_file.slice(-30,30) %>
+            <% end %>
+        </td>
+        <td><%= link_to 'Show', user_calendar %></td>
+        <td><%= link_to 'Remove', user_calendar, :confirm => 'Are you absolutely sure?', :method => :delete %></td>
+      </tr>
+    <% end %>
+    </table>
+
+</div>
