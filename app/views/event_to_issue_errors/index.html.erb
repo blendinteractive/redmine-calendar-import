@@ -26,4 +26,4 @@
 <div class="flash notice">No Event Errors!</div>
 <% end %>
 <br /><br />
-<%= render :partial=>"skipped_entries_list", :locals=>{:skipped_entries=>SkippedEntry.find(:all, :conditions => ['start_date >  ?', 2.months.ago.to_datetime])} %>
+<%= render :partial=>"skipped_entries_list", :locals=>{:skipped_entries=>SkippedEntry.find(:all)} %>
