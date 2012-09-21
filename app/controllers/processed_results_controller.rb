@@ -1,4 +1,5 @@
 class ProcessedResultsController < ApplicationController
+  unloadable
   layout 'base'
 
   # GET /processed_results

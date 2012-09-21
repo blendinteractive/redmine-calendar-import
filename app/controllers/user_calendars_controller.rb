@@ -1,4 +1,5 @@
 class UserCalendarsController < ApplicationController
+  unloadable
   layout 'base'
 
   def just_user_calendars
@@ -49,7 +50,6 @@ class UserCalendarsController < ApplicationController
   def create
     @user_calendar = UserCalendar.new(params[:user_calendar])
 
-
     @user_calendar.save
     render :partial=>"calendar_imports/user_calendar_list", :locals=>{:user_calendars=>@user_calendar.user.user_calendars}
     flash[:notice] = "The calendar #{@user_calendar.name} was successfully created."
@@ -78,8 +78,7 @@ class UserCalendarsController < ApplicationController
   def destroy
     @user_calendar = UserCalendar.find(params[:id])
     @name = @user_calendar.name
-    @user_calendar.destroy
-    
+    @user_calendar.destroy    
 
     respond_to do |format|
       flash[:notice] = "The calendar '#{@name}' was successfully removed."

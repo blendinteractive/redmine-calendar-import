@@ -1,4 +1,5 @@
 class ErrorsController < ApplicationController
+  unloadable
   layout 'base'
 
   # GET /errors

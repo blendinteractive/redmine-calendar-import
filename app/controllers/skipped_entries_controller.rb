@@ -1,4 +1,5 @@
 class SkippedEntriesController < ApplicationController
+  unloadable
   layout 'base'
 
   # GET /skipped_entries

@@ -1,4 +1,5 @@
 class EventToIssueErrorsController < ApplicationController
+  unloadable
   layout 'base'
   before_filter :require_admin
   skip_before_filter :require_admin, :only => [:show]
@@ -6,7 +7,7 @@ class EventToIssueErrorsController < ApplicationController
   # GET /event_to_issue_errors
   # GET /event_to_issue_errors.xml
   def index
-    @event_to_issue_errors = EventToIssueError.find(:all,:conditions => ['start_date >  ?', 2.months.ago.to_datetime])
+    @event_to_issue_errors = EventToIssueError.find(:all)
 
     respond_to do |format|
       format.html # index.html.erb

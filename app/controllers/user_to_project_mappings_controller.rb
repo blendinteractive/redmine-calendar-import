@@ -1,4 +1,5 @@
 class UserToProjectMappingsController < ApplicationController
+  unloadable
   layout 'base'
 
   # GET /user_to_project_mappings

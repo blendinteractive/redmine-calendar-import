@@ -1,4 +1,5 @@
 class ScriptCreatedIssuesController < ApplicationController
+  unloadable
   layout 'base'
 
   # GET /script_created_issues
