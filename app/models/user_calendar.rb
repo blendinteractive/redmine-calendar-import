@@ -7,4 +7,8 @@ class UserCalendar < ActiveRecord::Base
    
    #this needs to be set up later
    # has_many :processed_results, :foreign_key => 'user_calendar_id', :dependent => :delete_all
+   
+   User.class_eval do
+     has_many :user_calendars
+   end
 end
