@@ -1,7 +1,8 @@
 <br />
 <%= error_messages_for :user_calendar %>
 
-<% remote_form_for(user_calendar, :update=>'user_calendars') do |f| %>
+
+<% remote_form_for(@user_calendar) do |f| %>
     <%= f.hidden_field :user_id %>
 
 
