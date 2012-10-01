@@ -30,8 +30,6 @@ cutoff_date = cutoff_date + 4.hours
 # ===> each user with an ICS file to import
 user_list.each do |user|
     if user.user_calendars.any?    
-
-
         # ===> for each ics_file   
         user.user_calendars.each do |calendar_object|
             calendar_read = TRUE
@@ -46,7 +44,7 @@ user_list.each do |user|
             # initialize your calendar
             
             begin
-              found=FALSE
+                found=FALSE
                 attempts=0
 
                 #try three times to open the file and wait a minute between each attempt.
@@ -62,72 +60,48 @@ user_list.each do |user|
                     end
                 else
                     found=TRUE
-                end while (!found&&attempts<3)
+            end while (!found&&attempts<3)
 
-                cals = Icalendar.parse(cal_file)
-                calendar = cals.first
-    
-                 if calendar
-    
-                    # ===> each event in the calendar in last three months
-                    # Go through each event
-                     calendar.events.each do |event|
-=begin
-                        process_time_used = process_time
-                        corrected_start_date = event.dtstart.new_offset(process_time.utc_offset)
-                        corrected_end_date = event.dtend.new_offset(process_time.utc_offset)
-
-                        corrected_start_date = Time.parse(corrected_start_date.to_s)
-                        corrected_end_date = Time.parse(corrected_end_date.to_s)
-                        cutoff_date = Time.parse(cutoff_date.to_time.to_s)
-                        three_months_ago = Time.parse(three_months_ago.to_time.to_s).beginning_of_day()
-
-                        corrected_start_date = corrected_start_date.strftime("%j %H:%M:%S")
-                        corrected_end_date = corrected_end_date.strftime("%j %H:%M:%S")
-                        cutoff_date = cutoff_date.strftime("%j %H:%M:%S")
-                        three_months_ago = three_months_ago.strftime("%j %H:%M:%S")
-                        process_time_used = process_time_used.strftime("%j %H:%M:%S")
-=end
-
-                        # only translate the event if it has completed already
-                        if event.dtend < process_time && event.dtstart.end_of_day > three_months_ago.beginning_of_day && event.dtstart > cutoff_date
-                           #use the current data to either add or edit a time entry from an event
-                           begin
-                             translate_event(event, user.id, calendar_object.id)
-                           rescue Exception => e
-                               debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
-                           end
+            cals = Icalendar.parse(cal_file)
+            calendar = cals.first
+            if calendar
+                # ===> each event in the calendar in last three months
+                # Go through each event
+                calendar.events.each do |event|
+                    # only translate the event if it has completed already
+                    if event.dtend < process_time && event.dtstart.end_of_day > three_months_ago.beginning_of_day && event.dtstart > cutoff_date
+                        #use the current data to either add or edit a time entry from an event
+                        begin
+                            translate_event(event, user.id, calendar_object.id)
+                        rescue Exception => e
+                            debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
                         end
-                        
-                     end
-                    # <=== each event in the calendar 
-    
-                 end
-                # <=== if calendar opens
+                    end
+                end
+                # <=== each event in the calendar 
+            end
+            # <=== if calendar opens
             rescue Exception => e
-              print "Error parsing calendar \"", ics_file, "\":\n" , e, "\n\n"
-              calendar_object.last_result = e.to_s
-              calendar_object.last_processed_at = DateTime.now
-              calendar_object.save
-              calendar_read = FALSE
+                print "Error parsing calendar \"", ics_file, "\":\n" , e, "\n\n"
+                calendar_object.last_result = e.to_s
+                calendar_object.last_processed_at = DateTime.now
+                calendar_object.save
+                calendar_read = FALSE
             else
-              calendar_object.last_result = "Success"
-              calendar_object.last_processed_at = DateTime.now
-              calendar_object.save
+                calendar_object.last_result = "Success"
+                calendar_object.last_processed_at = DateTime.now
+                calendar_object.save
             end
 
-             begin
-            if calendar_read
-                remove_entries(user.id, calendar_object.id)
-            end
+            begin
+                if calendar_read
+                    remove_entries(user.id, calendar_object.id)
+                end
             rescue Exception => e
-                 debug('Error removing entries: '+ e.to_s, __LINE__, __FILE__)
+                debug('Error removing entries: '+ e.to_s, __LINE__, __FILE__)
             end
-
-
         end
         # <=== for each calendar_object     
-       
     end
 end
 # <=== each user with an ICS file to import
