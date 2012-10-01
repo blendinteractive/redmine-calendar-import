@@ -22,8 +22,8 @@
                         X
                 <%      end
                     end %></td>
-            <td><%= link_to 'Edit', edit_user_to_project_mappings_path(user_to_project_mapping, :event_guid => user_to_project_mapping.event_guid) %></td>
-            <td><%= link_to 'Remove', user_to_project_mappings_path, :confirm => 'Are you sure?', :method => :delete %></td>
+            <td><%= link_to 'Edit', edit_user_to_project_mapping_path(user_to_project_mapping, :event_guid => user_to_project_mapping.event_guid) %></td>
+            <td><%= link_to 'Remove', user_to_project_mapping_path(user_to_project_mapping), :confirm => 'Are you sure?', :method => :delete %></td>
             </tr>
         <% else %>
          <tr style="background-color: #FFE3E3;" >
@@ -40,5 +40,5 @@
     <div>You currently don't have any projects aliased.</div>
 <% end %>
 
-    <%= link_to 'Create a New Alias', new_user_to_project_mappings_path %>
+    <%= link_to 'Create a New Alias', new_user_to_project_mapping_path %>
     
