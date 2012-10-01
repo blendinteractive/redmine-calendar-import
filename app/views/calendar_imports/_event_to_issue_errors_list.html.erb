@@ -14,7 +14,7 @@
   <tr title="Date: <%=h event_to_issue_error.start_date.strftime('%m-%d-%Y %I:%M:%S %p %Z') %>" >
     <td><%=h event_to_issue_error.summary %></td>
     <td><%=h Error.find(event_to_issue_error.error_id).description %></td>
-    <td width="60px"><%= link_to 'See Details', event_to_issue_errors_path(@event_to_issue_error) %></td>
+    <td width="60px"><%= link_to 'See Details', event_to_issue_error %></td>
   </tr>
 <% end %>
 </table>
