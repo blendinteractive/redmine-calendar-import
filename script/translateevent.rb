@@ -115,22 +115,6 @@ def translate_event(event, user_id, calendar_id)
                         returned_issue_id = found_issue_id
                     else
                         actual_title = issue_id
-=begin
-                        actual_title=''
-                        actual_description=''
-                        title_description_array=issue_description.scan(/^([^-]*)[-](.*)$/)
-
-                        if !title_description_array[0].nil?
-                            actual_title = title_description_array[0][0] #get the left side of "title - description"
-                            issue_description = title_description_array[0][1] #get the right side of "title - description"
-                        end
-
-                        #they messed up creating the title:description for the issue, so we'll create a title and put their issue in
-                        if actual_title == ''
-                            actual_title='New Issue (improperly formed title)'
-                        end
-=end
-
                         #this will return the issue_id of the issue it creates.  Unless there is an error when trying to create the issue.
                         #then it will return the error_id with a - symbol in front (so that I know it's an error and not a issue_id)
                         begin
@@ -250,13 +234,6 @@ def split_issue_description(issue_list)
         else
             error_hash[issue]=10 #There was an error trying to seperate out your title or ID from the description.
         end
-
-        # This is no longer necessary, due to the required uniqueness off the issues already
-        #if issue_array[0][0].include?('*')
-        #    issue_array[0][0] = issue_array[0][0] + 'new' + count.to_s
-        #    count=count+1
-        #end
-
     end
 
     return issue_hash, error_hash
@@ -346,8 +323,6 @@ def create_issue(user_id, project_id, title, description)
     end    
    
     #allowed_statuses = ([default_status] + default_status.find_new_statuses_allowed_to(User.current.role_for_project(project), issue_tracker)).uniq
-
-    
     #requested_status = (params[:issue] && params[:issue][:status_id] ? IssueStatus.find_by_id(params[:issue][:status_id]) : default_status)
     # Check that the user is allowed to apply the requested status
     #issue_status = (allowed_statuses.include? requested_status) ? requested_status : default_status
@@ -471,8 +446,6 @@ def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_i
         event_to_issue_error.summary = summary
         event_to_issue_error.description = description
 
-
-
         saved_properly = event_to_issue_error.save
 
         unless saved_properly
@@ -503,9 +476,7 @@ def create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, star
 
     skipped_entry = SkippedEntry.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid})
 
-
     if skipped_entry
-        
         skipped_entry.start_date = start_date
         skipped_entry.end_date = end_date
         skipped_entry.summary = summary
@@ -602,26 +573,17 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
     hours_assigned = 0.0
     hours_assigned = minutes_assigned / 60.0
 
-    # Removed as of 10/12/2009 to allow for text fields instead of varchar(255)
-    #if issue_description.length > 255
-    #    issue_description = issue_description.slice(0,255)
-    #end
-    
-
     time_entry = TimeEntry.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid, :issue_id=>issue_id})
-
 
     if time_entry
     
         time_entry_date = spent_on
-
         time_entry.spent_on = spent_on
         time_entry.tyear = time_entry_date.year
         time_entry.tmonth = time_entry_date.month
         time_entry.tweek = time_entry_date.to_date.cweek
         time_entry.hours = hours_assigned
         time_entry.comments = issue_description
-
 
         saved_properly = time_entry.save
 
@@ -635,10 +597,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
     else
         time_entry = TimeEntry.new
 
-        #activities = Enumeration::get_values('ACTI')
 	activities = TimeEntryActivity.all
-
-
         time_entry_date = spent_on
 
         time_entry.project_id = project_id
@@ -663,9 +622,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
         
     end
 
-
     process_result(user_id, calendar_id, time_entry_id, 0, 0)
-
 end
 
 
@@ -696,19 +653,10 @@ def get_error_value(user_id, project_name, issue_id, issue_hash, event_guid, rru
     if rrule != []
         error_id_list << 9 #You are not allowed to save reoccurring issues in your timesheet for Redmine. 
     elsif !(issue_id =~ /^[0-9]+$/) #instead of checking for a '*' we are now checking to see if it has more than just #'s
-
         #make sure two identical issue's weren't created under the same event
         check_for_originality(issue_id, issue_hash).each do |error_id|
             error_id_list << error_id
         end 
-        
-        #this is no longer in use
-=begin  
-        check_for_proper_title(issue_id, issue_hash).each do |error_id|
-            error_id_list << error_id
-        end 
-=end
-
     else
         #make sure two identical issue's weren't created under the same event
         check_for_originality(issue_id, issue_hash).each do |error_id|
@@ -721,9 +669,7 @@ def get_error_value(user_id, project_name, issue_id, issue_hash, event_guid, rru
         # <=== foreach error, insert the error into the array
     end
 
-   
     error_id_list
-
 end
 
 
@@ -784,7 +730,6 @@ def check_for_originality(id_searching_for, issue_hash)
         
     end
     issue_hash.each do |issue_id, issue_description|
-
         # referencing id's by ID number
         if id_searching_for == issue_id
             found=found+1
@@ -792,7 +737,6 @@ def check_for_originality(id_searching_for, issue_hash)
         elsif name_searching_for == issue_id
             found=found+1
         end        
-       
     end    
     if found > 1
         error_list << 4 #This issue is referenced twice in the same event.
@@ -819,35 +763,22 @@ end
 # Return: an issue_id or nothing
 #
 #################################################################
-
 def event_issue_errors(user_id, project_name, issue_id, event_guid, current_error_list)
-    
-
     error_list = []
-    #this first check is no longer needed
-    #check to see if the event_issue is more than just numbers
-    #if !(issue_id =~ /^[0-9]+$/)  #use some regex for this
-    #    error_list << 2 #The issue id cannot have alpha characters or symbols in it.  Integers only.
-    #else
+    project_id = get_project_id(user_id, project_name, event_guid)
 
-        project_id = get_project_id(user_id, project_name, event_guid)
-
-        # ===> a valid project name
-        if project_id           
-            issue = Issue.find_by_id(issue_id)
-            unless issue.nil?
-                unless current_error_list.include?(1)
-                    if issue.project_id != project_id
-                        error_list << 3 #The issue id is not in the project specified.
-                    end
+    if project_id           
+        issue = Issue.find_by_id(issue_id)
+        unless issue.nil?
+            unless current_error_list.include?(1)
+                if issue.project_id != project_id
+                    error_list << 3 #The issue id is not in the project specified.
                 end
-            else
-                error_list << 8 #The issue id is not a valid issue id in the system even though it was formed correctly. 
-            end                
-        end
-        # <=== a valid project name
-    #end
-
+            end
+        else
+            error_list << 8 #The issue id is not a valid issue id in the system even though it was formed correctly. 
+        end                
+    end
     error_list
 end
 
@@ -895,16 +826,12 @@ end
 #################################################################
 
 def get_project_id(user_id, project_name, event_guid)
-    
     project_id=0
-
-
     project_alias = UserToProjectMapping.find(:first, :conditions=>{:project_alias=>project_name, :event_guid=>event_guid, :user_id=>user_id})
     
     if project_alias
         project_id = project_alias.project_id
     end
-
     # ===> if that has a value, we know that we have a project alias for that project for this specific event_guid and there should be no reason to look into this project name any further, as we know that it is valid now
     if project_id == 0
         project_alias = UserToProjectMapping.find(:first, :conditions=>{:project_alias=>project_name, :event_guid=>'', :user_id=>user_id})
@@ -913,8 +840,6 @@ def get_project_id(user_id, project_name, event_guid)
             project_id = project_alias.project_id
         end
     end
-
-
     # ===> if that has a value, we know that we have a project alias for that project and there should be no reason to look into this project name any further, as we know that it is valid now
     if project_id == 0
         project = Project.find(:first, :conditions=>{:name => project_name})
