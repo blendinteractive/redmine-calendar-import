@@ -7,11 +7,11 @@ class EventToIssueErrorsController < ApplicationController
   # GET /event_to_issue_errors
   # GET /event_to_issue_errors.xml
   def index
-    @event_to_issue_errors = EventToIssueError.find(:all)
+    @event_to_issue_errors = EventToIssueError.find(:all, :conditions => ["start_date > ?", 2.months.ago ])
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @event_to_issue_errors }
+      format.xml  { render :xml => EventToIssueError.find(:all) }
     end
   end
 
