@@ -22,9 +22,9 @@
 
         <div class="box">
         <h3>Import Errors</h3>
-			<%= render :partial=>"event_to_issue_errors_list", :locals=>{:event_to_issue_errors=>@user.event_to_issue_errors} %>
+			<%= render :partial=>"event_to_issue_errors_list", :locals=>{:event_to_issue_errors=>@user.event_to_issue_errors.find(:all, :conditions => ["start_date > ?", 2.months.ago ])} %>
         </div>
 		
-		<%= render :partial=>"skipped_entries_list", :locals=>{:skipped_entries=>@user.skipped_entries} %>
+		<%= render :partial=>"skipped_entries_list", :locals=>{:skipped_entries=>@user.skipped_entries.find(:all, :conditions => ["start_date > ?", 2.months.ago ])} %>
 </div>	
 
