@@ -68,8 +68,9 @@ class UserCalendarsController < ApplicationController
     @user_calendar = UserCalendar.new(params[:user_calendar])
 
     @user_calendar.save
-    render :partial=>"calendar_imports/user_calendar_list", :locals=>{:user_calendars=>@user_calendar.user.user_calendars}
     flash[:notice] = "The calendar #{@user_calendar.name} was successfully created."
+    redirect_to(url_for :controller => "calendar_imports", :action => "index")
+
 
   end
 
@@ -93,10 +94,14 @@ class UserCalendarsController < ApplicationController
   # DELETE /user_calendars/1
   # DELETE /user_calendars/1.xml
   def destroy
+    unless params[:id]
+      raise "No ID passed"
+    end
+    puts params[:id]
+
     @user_calendar = UserCalendar.find(params[:id])
     @name = @user_calendar.name
-    @user_calendar.destroy    
-
+    @user_calendar.destroy
     respond_to do |format|
       flash[:notice] = "The calendar '#{@name}' was successfully removed."
       format.html { redirect_to(url_for :controller => "calendar_imports", :action => "index") }
