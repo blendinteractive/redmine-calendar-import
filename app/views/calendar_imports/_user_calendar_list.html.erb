@@ -17,8 +17,8 @@
                 <%=h '...'+user_calendar.ics_file.slice(-30,30) %>
             <% end %>
         </td>
-        <td><%= link_to 'Show', @user_calendar %></td>
-        <td><%= link_to 'Delete', user_calendar, :confirm => 'Are you absolutely sure?', :method => :delete %></td>
+        <td><%= link_to 'Show', :controller => "user_calendars", :id => user_calendar, :action => "show" %></td>
+        <td><%= link_to 'Delete', :controller => "user_calendars", :id => user_calendar, :confirm => 'Are you absolutely sure?', :action => :destroy %></td>
       </tr>
     <% end %>
     </table>

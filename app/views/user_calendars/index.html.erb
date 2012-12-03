@@ -10,13 +10,13 @@
   <tr>
     <td><%=h user_calendar.user_id %></td>
     <td><%=h user_calendar.ics_file %></td>
-    <td><%= link_to 'Show', user_calendar %></td>
-    <td><%= link_to 'Edit', edit_user_calendar_path(user_calendar) %></td>
-    <td><%= link_to 'Destroy', user_calendar, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show', :controller => "user_calendar", :id => user_calendar %></td>
+    <td><%= link_to 'Edit', :controller => "user_calendar", :id => user_calendar, :method => :edit%></td>
+    <td><%= link_to 'Destroy', :controller => "user_calendar", :id => user_calendar, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New user_calendar', new_user_calendar_path %>
+<%= link_to 'New user_calendar', :controller => "user_calendars", :action => "new" %>
