@@ -25,6 +25,7 @@ require 'active_support'
 require File.expand_path(File.dirname(__FILE__) + '/utilities.rb')
 require File.expand_path(File.dirname(__FILE__) + '/calendar.rb')
 require File.expand_path(File.dirname(__FILE__) + '/translateevent.rb')
+require File.expand_path(File.dirname(__FILE__) + '/ical_hump.rb')
 
 
 
