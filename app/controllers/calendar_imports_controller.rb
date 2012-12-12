@@ -24,4 +24,15 @@ class CalendarImportsController < ApplicationController
     @user_calendar = UserCalendar.new
     #UserToProjectMapping.find(@user.id)
   end
+
+  def user_index
+  	#TODO restrict this to admins
+  	split = params[:name].split(',')
+  	firstname = split[0]
+  	lastname = split[1]
+  	@user = User.find_by_firstname_and_lastname(firstname,lastname)
+  	@user_calendar = UserCalendar.new
+  	
+  	render "index"
+  end
 end
