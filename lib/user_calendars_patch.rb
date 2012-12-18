@@ -14,10 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+require File.expand_path(File.dirname(__FILE__) + '/import_processor.rb')
 
 module UserCalendarsPatch
   def self.included(base)
+    base.send(:include, ImportProcessor)
+
     base.class_eval do
+      unloadable
       has_many :user_calendars
       has_many :user_to_project_mappings
       has_many :event_to_issue_errors

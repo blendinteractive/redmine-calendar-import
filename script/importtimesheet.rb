@@ -21,7 +21,6 @@ require basepath + 'config/boot'
 require basepath + 'config/environment'
 require 'date'
 require 'active_support'
-require File.expand_path(File.dirname(__FILE__) + '/process_utilities.rb')
 
 
 #delete from processed_results where date < 3 months ago
@@ -34,6 +33,6 @@ user_list = User.find_all_by_id(user_ids)
 # ===> each user with an ICS file to import
 user_list.each do |user|
     print "Starting user: #{user.login}\n"
-    process_user(user)
+    ImportProcessor::process_user(user)
 end
 # <=== each user with an ICS file to import
