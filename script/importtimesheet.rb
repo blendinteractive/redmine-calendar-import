@@ -22,17 +22,24 @@ require basepath + 'config/environment'
 require 'date'
 require 'active_support'
 
+if (ARGV.length < 1)
+    #delete from processed_results where date < 3 months ago
+    three_months_ago = 12.months.ago.to_datetime
+    make_archived(three_months_ago, 'date')
 
-#delete from processed_results where date < 3 months ago
-three_months_ago = 12.months.ago.to_datetime
-make_archived(three_months_ago, 'date')
+    user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
+    user_list = User.find_all_by_id(user_ids)
 
-user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
-user_list = User.find_all_by_id(user_ids)
-
-# ===> each user with an ICS file to import
-user_list.each do |user|
-    print "Starting user: #{user.login}\n"
-    ImportProcessor::process_user(user)
+    # ===> each user with an ICS file to import
+    user_list.each do |user|
+        puts "Starting user: #{user.login}"
+        ImportProcessor::process_user(user)
+    end
+else
+    ARGV.each do|name|
+        puts "Starting user with firstname: #{name}"
+        user = User.find_by_firstname(name)
+        ImportProcessor::process_user(user)
+    end
 end
 # <=== each user with an ICS file to import
