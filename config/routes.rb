@@ -17,6 +17,7 @@
 
 ActionController::Routing::Routes.draw do |map|
   map.connect 'calendar_import/:name/', :controller => 'calendar_imports', :action => 'user_index'
+  map.connect 'calendar_import/:name/pull', :controller => 'calendar_imports', :action => 'user_pull'
   map.connect 'calendar_import', :controller => 'calendar_imports'
   map.connect 'user_calendar', :controller => 'user_calendars'
   map.resource :user_calendars

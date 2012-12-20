@@ -35,4 +35,15 @@ class CalendarImportsController < ApplicationController
   	
   	render "index"
   end
+
+  def user_pull
+    split = params[:name].split(',')
+    firstname = split[0]
+    lastname = split[1]
+    @user = User.find_by_firstname_and_lastname(firstname,lastname)
+    ImportProcessor::process_user(@user)
+    @user_calendar = UserCalendar.new
+
+    render 'index'
+  end
 end
