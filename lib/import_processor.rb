@@ -25,34 +25,34 @@ module ImportProcessor
         # initialize your calendar
         
         begin
-            
-
-            
-            
             #handle one redirect
-            location = Net::HTTP.get_response(URI.parse(ics_file))['location']
-            print "redirected from #{ics_file} to #{location}\n" unless location == ics_file
+            location = Net::HTTP.get_response(URI.parse(ics_file))['location'] 
+            print "redirected from #{ics_file} to #{location}\n" unless location == nil
+            if location == nil
+                location = ics_file
+                print "Using #{ics_file}"
+            end
                 
             cal_file = open(location, :http_basic_authentication=>[http_user, http_password]).read
 
             cals = Icalendar.parse(cal_file)
             calendar = cals.first
-        if calendar
-            # ===> each event in the calendar in last three months
-            # Go through each event
-            calendar.events.each do |event|
-                # only translate the event if it has completed already
-                if event.dtend < process_time && event.dtstart.end_of_day > three_months_ago.beginning_of_day && event.dtstart > cutoff_date
-                    #use the current data to either add or edit a time entry from an event
-                    begin
-                        translate_event(event, user.id, calendar_object.id)
-                    rescue Exception => e
-                        debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
+            if calendar
+                # ===> each event in the calendar in last three months
+                # Go through each event
+                calendar.events.each do |event|
+                    # only translate the event if it has completed already
+                    if event.dtend < process_time && event.dtstart.end_of_day > three_months_ago.beginning_of_day && event.dtstart > cutoff_date
+                        #use the current data to either add or edit a time entry from an event
+                        begin
+                            translate_event(event, user.id, calendar_object.id)
+                        rescue Exception => e
+                            debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
+                        end
                     end
                 end
+                # <=== each event in the calendar 
             end
-            # <=== each event in the calendar 
-        end
         # <=== if calendar opens
         rescue Exception => e
             print "Error parsing calendar \"", location, "\":\n" , e, "\n\n"
