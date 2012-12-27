@@ -192,7 +192,7 @@ end
 #################################################################
 
 def round_to_15_minutes(minutes)
-    minutes
+    minutes + (15 - (minutes % 15))
 end
 
 
