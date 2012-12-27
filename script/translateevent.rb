@@ -121,10 +121,7 @@ def translate_event(event, user_id, calendar_id)
                 
                 # if this is a new issue, we need to create the issue before we assign time to it.
                 if !(issue_id =~ /^[0-9]+$/)
-                    
                     found_issue_id = NIL
-
-                    
                     project_id = get_project_id(user_id, project_name, event_guid)
                     found_issue_id = find_issue(issue_id, project_id)
 
@@ -135,32 +132,32 @@ def translate_event(event, user_id, calendar_id)
                         #this will return the issue_id of the issue it creates.  Unless there is an error when trying to create the issue.
                         #then it will return the error_id with a - symbol in front (so that I know it's an error and not a issue_id)
                         begin
-                          returned_issue_id = create_issue(user_id, project_id, actual_title, issue_description)
+                          puts "Skipping create_issue(#{user_id},#{project_id},#{actual_title},#{issue_description}):#{returned_issue_id}:#{returned_issue_id == nil}"
+                          returned_issue_id = -1
+                          #returned_issue_id = create_issue(user_id, project_id, actual_title, issue_description)
                         rescue Exception => e
                             puts 'user_id:'+user_id.to_s
                             puts 'project_id:'+project_id.to_s
                             puts 'actual_title:'+actual_title.to_s
                             puts 'issue_description:'+issue_description.to_s
-
                             debug('Error creating a new issue: '+ e.to_s, __LINE__, __FILE__)
                         end
                     end
                     
-                    unless returned_issue_id.nil?
-                        if returned_issue_id < 0
-                            #we already know it's not valid because it threw an error in the create_issue() function
-                            begin
-                              log_error_list(user_id, calendar_id, event_guid, start_date, end_date, issue_id, error_id_list, project_name, description, returned_issue_id*-1)
-                            rescue Exception => e
-                                debug('Error logging an error list for a newly created issue '+issue_description+': '+ e.to_s, __LINE__, __FILE__)
-                            end
-                        else
-                            begin
-                              log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, returned_issue_id, issue_description, project_id, start_date)
-                            rescue Exception => e
-                                debug('Error loggin a time entry for a newly created issue: '+ e.to_s, __LINE__, __FILE__)
-                            end  
+                    if (returned_issue_id < 0)
+                        #we already know it's not valid because it threw an error in the create_issue() function
+                        begin
+                          puts "Skipping issue creation but logging"
+                          log_error_list(user_id, calendar_id, event_guid, start_date, end_date, issue_id, error_id_list, project_name, description, returned_issue_id*-1)
+                        rescue Exception => e
+                            debug('Error logging an error list for a newly created issue '+issue_description+': '+ e.to_s, __LINE__, __FILE__)
                         end
+                    else
+                        begin
+                          log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, returned_issue_id, issue_description, project_id, start_date)
+                        rescue Exception => e
+                            debug('Error loggin a time entry for a newly created issue: '+ e.to_s, __LINE__, __FILE__)
+                        end  
                     end
                     
 
