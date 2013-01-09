@@ -20,20 +20,19 @@ module ImportProcessor
         make_archived(calendar_object.id, 'calendar_id')
 
         ics_file = calendar_object.ics_file
-	puts ics_file
+	      puts ics_file
         http_user = calendar_object.http_user
         http_password = calendar_object.http_password
         # ===> if calendar opens
         # initialize your calendar
         
         begin
-            #handle one redirect
-            puts "Checking location url:"
+            puts "Checking location url: #{ics_file}"
             uri_parse = URI.parse(ics_file)
             puts "URI Parsed Successfully: #{uri_parse}"
                 
             cal_file = open(uri_parse, :http_basic_authentication=>[http_user, http_password], :allow_unsafe_redirects => true).read
-	    puts "Calendar read"
+            puts "Calendar read"
             cals = Icalendar.parse(cal_file)
             puts "Calendar parsed"
             calendar = cals.first
