@@ -1,6 +1,7 @@
 module ImportProcessor
     require 'icalendar'
-    require 'net/http'
+    require 'open-uri'
+    require File.expand_path(File.dirname(__FILE__) + '/open_uri.rb')
     require 'uri'
     require File.expand_path(File.dirname(__FILE__) + '/../script/utilities.rb')
     require File.expand_path(File.dirname(__FILE__) + '/../script/calendar.rb')
@@ -19,6 +20,7 @@ module ImportProcessor
         make_archived(calendar_object.id, 'calendar_id')
 
         ics_file = calendar_object.ics_file
+	puts ics_file
         http_user = calendar_object.http_user
         http_password = calendar_object.http_password
         # ===> if calendar opens
@@ -26,16 +28,14 @@ module ImportProcessor
         
         begin
             #handle one redirect
-            location = Net::HTTP.get_response(URI.parse(ics_file))['location'] 
-            print "redirected from #{ics_file} to #{location}\n" unless location == nil
-            if location == nil
-                location = ics_file
-                print "Using #{ics_file}"
-            end
+            puts "Checking location url:"
+            uri_parse = URI.parse(ics_file)
+            puts "URI Parsed Successfully: #{uri_parse}"
                 
-            cal_file = open(location, :http_basic_authentication=>[http_user, http_password]).read
-
+            cal_file = open(uri_parse, :http_basic_authentication=>[http_user, http_password], :allow_unsafe_redirects => true).read
+	    puts "Calendar read"
             cals = Icalendar.parse(cal_file)
+            puts "Calendar parsed"
             calendar = cals.first
             if calendar
                 # ===> each event in the calendar in last three months
@@ -55,7 +55,7 @@ module ImportProcessor
             end
         # <=== if calendar opens
         rescue Exception => e
-            print "Error parsing calendar \"", location, "\":\n" , e, "\n\n"
+            print "Error parsing calendar \"", ics_file, "\":\n" , e, "\n\n"
             calendar_object.last_result = e.to_s
             calendar_object.last_processed_at = DateTime.now
             calendar_object.save
