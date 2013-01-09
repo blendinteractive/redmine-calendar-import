@@ -17,7 +17,7 @@
 
 require 'digest/md5'
 require 'yaml'
-
+TIMEZONE = "Central Time (US & Canada)"
 #################################################################
 # Translate Event
 #
@@ -411,6 +411,10 @@ def log_error_list(user_id, calendar_id, event_guid, start_date, end_date, issue
 
 end
 
+def update_time(time, zone_name)
+  zone = ActiveSupport::TimeZone.new(zone_name)
+  time.in_time_zone(zone).time
+end
 
 #################################################################
 # Create Error
@@ -420,9 +424,9 @@ end
 #################################################################
 
 def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_id, error_id, summary, description)
-    zone = ActiveSupport::TimeZone.new("Central Time (US & Canada)")
-    start_date = start_date.in_time_zone(zone).time
-    end_date = end_date.in_time_zone(zone).time
+
+    start_date = update_time(start_date,TIMEZONE)
+    end_date = update_time(end_date, TIMEZONE)
 
     event_to_issue_error = EventToIssueError.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid, :issue_id=>issue_id, :error_id=>error_id})
     event_to_issue_error_id = 0
@@ -438,14 +442,14 @@ def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_i
 
         saved_properly = event_to_issue_error.save
 
-        if !saved_properly
+        unless saved_properly
+            puts "Event to issue error save: #{event_to_issue_error.save}"
+            puts "saved_properly: #{saved_properly}"
             debug('there was an error saving the EventToIssueError',__LINE__,__FILE__)
         end
         
         event_to_issue_error_id = event_to_issue_error.id
     else
-    
-    
         event_to_issue_error = EventToIssueError.new
 
         event_to_issue_error.user_id = user_id
@@ -482,9 +486,8 @@ end
 def create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, start_date, end_date, summary, description)
     skipped_entry_id = 0
 
-    #TODO - Do this the right way at some time
-    start_date = start_date - 5.hours
-    end_date = end_date - 5.hours
+    start_date = update_time(start_date, TIMEZONE)
+    end_date = update_time(end_date, TIMEZONE)
 
     skipped_entry = SkippedEntry.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid})
 
@@ -497,7 +500,7 @@ def create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, star
 
         saved_properly = skipped_entry.save
 
-        if !saved_properly
+        unless saved_properly
             debug('there was an error saving the new TimeEntry',__LINE__,__FILE__)
         end
         
@@ -515,14 +518,13 @@ def create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, star
 
         saved_properly = skipped_entry.save
 
-        if !saved_properly
+        unless saved_properly
             debug('there was an error saving the new SkippedEntry',__LINE__,__FILE__)
         end
         skipped_entry_id = skipped_entry.id
     end 
     
     process_result(user_id, calendar_id, 0, skipped_entry_id, 0)
-
 end
 
 
@@ -548,9 +550,7 @@ end
 
 def assign_minutes(issue_hash, minutes)
     divided_by = issue_hash.size
-
     minute_hash = {}
-
 
     #division by zero is a bad thing
     if divided_by > 0
@@ -581,14 +581,12 @@ end
 
 # Add or edit a time entry 
 def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id, issue_description, project_id, spent_on)
-
     hours_assigned = 0.0
     hours_assigned = minutes_assigned / 60.0
 
     time_entry = TimeEntry.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid, :issue_id=>issue_id})
 
     if time_entry
-    
         time_entry_date = spent_on
         time_entry.spent_on = spent_on
         time_entry.tyear = time_entry_date.year
@@ -599,7 +597,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
 
         saved_properly = time_entry.save
 
-        if !saved_properly
+        unless saved_properly
             puts time_entry.to_yaml
             debug('there was an error saving the TimeEntry',__LINE__,__FILE__)
         end
@@ -609,7 +607,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
     else
         time_entry = TimeEntry.new
 
-	activities = TimeEntryActivity.all
+	      activities = TimeEntryActivity.all
         time_entry_date = spent_on
 
         time_entry.project_id = project_id
