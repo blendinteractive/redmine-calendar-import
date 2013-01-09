@@ -79,8 +79,8 @@ end
 def translate_event(event, user_id, calendar_id)
     project_name = event.summary.strip
     minutes = (event.dtend.strftime('%s').to_i - event.dtstart.strftime('%s').to_i)/60
-    start_date = event.dtstart
-    end_date = event.dtend
+    start_date = update_time(event.dtstart, TIMEZONE)
+    end_date = update_time(event.dtend, TIMEZONE)
     description = event.description
     event_guid = Digest::MD5.hexdigest(event.uid+event.sequence.to_s)
     skipped_entries = ''
@@ -432,10 +432,6 @@ end
 #################################################################
 
 def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_id, error_id, summary, description)
-
-    start_date = update_time(start_date,TIMEZONE)
-    end_date = update_time(end_date, TIMEZONE)
-
     event_to_issue_error = EventToIssueError.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid, :issue_id=>issue_id, :error_id=>error_id})
     event_to_issue_error_id = 0
 
@@ -493,10 +489,6 @@ end
 
 def create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, start_date, end_date, summary, description)
     skipped_entry_id = 0
-
-    start_date = update_time(start_date, TIMEZONE)
-    end_date = update_time(end_date, TIMEZONE)
-
     skipped_entry = SkippedEntry.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid})
 
     if skipped_entry
