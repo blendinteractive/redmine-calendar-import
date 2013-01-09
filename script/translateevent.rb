@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 require 'digest/md5'
 require 'yaml'
 TIMEZONE = "Central Time (US & Canada)"
@@ -391,7 +390,12 @@ end
 
 def update_time(time, zone_name)
   zone = ActiveSupport::TimeZone.new(zone_name)
-  time.in_time_zone(zone).time
+  begin
+    time.in_time_zone(zone).time
+  rescue NoMethodError => e
+    puts "Converting date to datetime for event on: #{time}"
+    time.to_datetime().in_time_zone(zone).time
+  end
 end
 
 #################################################################
