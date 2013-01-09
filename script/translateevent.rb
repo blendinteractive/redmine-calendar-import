@@ -420,10 +420,9 @@ end
 #################################################################
 
 def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_id, error_id, summary, description)
-    
-    #TODO - Do this the right way at some time
-    start_date = start_date - 5.hours
-    end_date = end_date - 5.hours
+    zone = ActiveSupport::TimeZone.new("Central Time (US & Canada)")
+    start_date = start_date.in_time_zone(zone).time
+    end_date = end_date.in_time_zone(zone).time
 
     event_to_issue_error = EventToIssueError.find(:first, :conditions=>{:user_id=>user_id, :event_guid=>event_guid, :issue_id=>issue_id, :error_id=>error_id})
     event_to_issue_error_id = 0
@@ -436,7 +435,6 @@ def create_error(user_id, calendar_id, event_guid, start_date, end_date, issue_i
         event_to_issue_error.error_id = error_id
         event_to_issue_error.summary = summary
         event_to_issue_error.description = description
-
 
         saved_properly = event_to_issue_error.save
 
