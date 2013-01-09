@@ -18,6 +18,49 @@
 require 'digest/md5'
 require 'yaml'
 TIMEZONE = "Central Time (US & Canada)"
+
+def process_event_issue_list(calendar_id, description, end_date, event_guid, event_issue_list, minutes, project_name, start_date, user_id)
+  minute_hash={}
+  issue_hash={}
+  error_hash={}
+
+  if event_issue_list
+    if event_issue_list.size > 0
+      begin
+        issue_hash, error_hash=split_issue_description(event_issue_list)
+        if error_hash != {}
+          error_hash.each do |issue_id, create_issue_error|
+            log_error_list(user_id, calendar_id, event_guid, start_date, end_date, issue_id, [], project_name, description, create_issue_error)
+          end
+        end
+      rescue Exception => e
+        debug('Error caught splitting the issue description: '+ e.to_s, __LINE__, __FILE__)
+      end
+
+      begin
+        minute_hash=assign_minutes(issue_hash, minutes)
+      rescue Exception => e
+        debug('Error caught assigning minutes: '+ e.to_s, __LINE__, __FILE__)
+      end
+
+    end
+  end
+  return issue_hash, minute_hash
+end
+
+def process_skipped_entries(calendar_id, description, end_date, event_guid, issue_hash, project_name, skipped_entries, start_date, user_id)
+  if skipped_entries != '' or issue_hash.empty?
+    begin
+      if skipped_entries == ''
+        skipped_entries = '[the entire event, due to no valid entries appearing in the event]'
+      end
+      create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, start_date, end_date, project_name, description)
+    rescue Exception => e
+      debug('Error creating a skipped entry: '+ e.to_s, __LINE__, __FILE__)
+    end
+  end
+end
+
 #################################################################
 # Translate Event
 #
@@ -50,43 +93,8 @@ def translate_event(event, user_id, calendar_id)
         debug('Error getting an issue list: '+ e.to_s, __LINE__, __FILE__)
     end
 
-    minute_hash={}
-    issue_hash={}
-    error_hash={}
-
-    if event_issue_list
-        if event_issue_list.size > 0
-            begin
-                issue_hash, error_hash=split_issue_description(event_issue_list)
-                if error_hash != {}
-                      error_hash.each do |issue_id, create_issue_error|
-                        log_error_list(user_id, calendar_id, event_guid, start_date, end_date, issue_id, [], project_name, description, create_issue_error)
-                      end
-                end
-            rescue Exception => e
-                debug('Error caught splitting the issue description: '+ e.to_s, __LINE__, __FILE__)
-            end
-
-            begin            
-                minute_hash=assign_minutes(issue_hash, minutes)
-            rescue Exception => e
-                debug('Error caught assigning minutes: '+ e.to_s, __LINE__, __FILE__)
-            end
-            
-        end
-    end
-#    count=0
-
-    if skipped_entries != '' or issue_hash.empty?
-        begin   
-        if skipped_entries == ''
-            skipped_entries = '[the entire event, due to no valid entries appearing in the event]'
-        end
-          create_skipped_entry(skipped_entries, user_id, calendar_id, event_guid, start_date, end_date, project_name, description)
-        rescue Exception => e
-            debug('Error creating a skipped entry: '+ e.to_s, __LINE__, __FILE__)
-        end
-    end
+    issue_hash, minute_hash = process_event_issue_list(calendar_id, description, end_date, event_guid, event_issue_list, minutes, project_name, start_date, user_id)
+    process_skipped_entries(calendar_id, description, end_date, event_guid, issue_hash, project_name, skipped_entries, start_date, user_id)
 
     begin
     
