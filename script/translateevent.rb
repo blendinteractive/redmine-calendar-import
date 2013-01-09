@@ -593,7 +593,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
         time_entry.tmonth = time_entry_date.month
         time_entry.tweek = time_entry_date.to_date.cweek
         time_entry.hours = hours_assigned
-        time_entry.comments = issue_description
+        time_entry.comments = issue_description[0..254]
 
         saved_properly = time_entry.save
 
@@ -614,7 +614,7 @@ def log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id,
         time_entry.user_id = user_id
         time_entry.issue_id = issue_id
         time_entry.hours = hours_assigned
-        time_entry.comments = issue_description
+        time_entry.comments = issue_description[0..254]
         time_entry.activity_id = activities[0].id
         time_entry.spent_on = spent_on
         time_entry.tyear = time_entry_date.year
