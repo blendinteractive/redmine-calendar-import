@@ -192,7 +192,12 @@ end
 #################################################################
 
 def round_to_15_minutes(minutes)
-    minutes + (15 - (minutes % 15))
+  new_minutes = minutes
+  if (minutes % 15) > 0
+    new_minutes = minutes + (15 - (minutes % 15))
+  end
+
+  new_minutes
 end
 
 
