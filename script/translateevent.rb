@@ -629,9 +629,7 @@ def get_error_value(user_id, project_name, issue_id, issue_hash, event_guid, rru
     error_id_list << error_id
   end
 
-  if rrule != []
-    error_id_list << 9 #You are not allowed to save reoccurring issues in your timesheet for Redmine.
-  elsif !(issue_id =~ /^[0-9]+$/) #instead of checking for a '*' we are now checking to see if it has more than just #'s
+  if !(issue_id =~ /^[0-9]+$/) #instead of checking for a '*' we are now checking to see if it has more than just #'s
                                   #make sure two identical issue's weren't created under the same event
     check_for_originality(issue_id, issue_hash).each do |error_id|
       error_id_list << error_id
