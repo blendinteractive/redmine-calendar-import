@@ -45,8 +45,8 @@ module ImportProcessor
                         #use the current data to either add or edit a time entry from an event
                         begin
                             translate_event(event, user.id, calendar_object.id)
-                        rescue Exception => e
-                            debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
+                        #rescue Exception => e
+                        #    debug('Error translating event: '+ e.to_s, __LINE__, __FILE__)
                         end
                     end
                 end

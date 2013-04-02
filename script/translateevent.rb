@@ -118,9 +118,9 @@ def translate_event(event, user_id, calendar_id)
           debug('Error logging an error list: '+ e.to_s, __LINE__, __FILE__)
         end
       else
-        # if this is a new issue, we need to create the issue before we assign time to it.
+
         if !(issue_id =~ /^[0-9]+$/)
-          project_id = get_project_id(user_id, project_name, event_guid)
+          project_id = get_project_id(user_id, project_name, event_guid, issue_id)
           found_issue_id = find_issue(issue_id, project_id)
 
           if found_issue_id
@@ -157,13 +157,12 @@ def translate_event(event, user_id, calendar_id)
               debug('Error loggin a time entry for a newly created issue: '+ e.to_s, __LINE__, __FILE__)
             end
           end
-
-
         else
+          project_id = get_project_id(user_id, project_name, event_guid,issue_id)
           begin
             log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id, issue_description, project_id, start_date)
           rescue Exception => e
-            debug('Error logging a time entry: '+ e.to_s, __LINE__, __FILE__)
+f            debug('Error logging a time entry: '+ e.to_s, __LINE__, __FILE__)
           end
         end
       end
@@ -508,7 +507,7 @@ end
 # For now we will just add up how many issue_ids are placed in the 
 # description and divide the minutes by that, rounding up to 15 minutes.
 # 
-# For future releases we will assign minutes according to the ammount
+# For future releases we will assign minutes according to the amount
 # specified per issue_id and the remaining (that weren't assigned a
 # specific amount) will have their amount calculated from the remaining
 # time that isn't assigned.
@@ -741,7 +740,7 @@ end
 #################################################################
 def event_issue_errors(user_id, project_name, issue_id, event_guid, current_error_list)
   error_list = []
-  project_id = get_project_id(user_id, project_name, event_guid)
+  project_id = get_project_id(user_id, project_name, event_guid, issue_id)
 
   if project_id
     issue = Issue.find_by_id(issue_id)
@@ -774,7 +773,7 @@ end
 
 def project_name_errors(user_id, project_name, event_guid)
   error_list = []
-  project_id = get_project_id(user_id, project_name, event_guid)
+  project_id = get_project_id(user_id, project_name, event_guid, 0)
 
   if project_id == 0
     error_list << 1 #This isn't a valid project name and you haven't set up an alias for it yet.
@@ -783,6 +782,32 @@ def project_name_errors(user_id, project_name, event_guid)
   error_list
 end
 
+def get_project_id_by_project_name_and_issue_subject_or_id(issue_id, project_name)
+  begin
+    project_ids = Project.all(:conditions => {:name => project_name}, :select => :id).collect(&:id)
+    if project_ids.length > 1
+      project_ids.each do |project_id|
+        if (issue_id =~ /^[0-9]+$/)
+          #If issue_id is a number (note that other areas use a not operator before this)
+          correct_project_issue = Issue.first(:conditions => {:id => issue_id, :project_id => project_id})
+        else
+          #If issue_id is text like "March Article"
+          correct_project_issue = Issue.first(:conditions => {:subject => issue_id, :project_id => project_id})
+        end
+
+        unless correct_project_issue.nil?
+          project_id = correct_project_issue.project_id
+          break
+        end
+      end
+    else
+      project_id = project_ids.first
+    end
+  rescue Exception => e
+    puts e
+  end
+  project_id
+end
 
 #################################################################
 # Get Project ID
@@ -799,28 +824,30 @@ end
 #
 #################################################################
 
-def get_project_id(user_id, project_name, event_guid)
+def get_project_id(user_id, project_name, event_guid, issue_id)
   project_id=0
-  project_alias = UserToProjectMapping.find(:first, :conditions=>{:project_alias=>project_name, :event_guid=>event_guid, :user_id=>user_id})
+
+
+  project_alias = UserToProjectMapping.first(:conditions=>{:project_alias=>project_name, :event_guid=>event_guid, :user_id=>user_id})
 
   if project_alias
     project_id = project_alias.project_id
   end
-  # ===> if that has a value, we know that we have a project alias for that project for this specific event_guid and there should be no reason to look into this project name any further, as we know that it is valid now
-  if project_id == 0
-    project_alias = UserToProjectMapping.find(:first, :conditions=>{:project_alias=>project_name, :event_guid=>'', :user_id=>user_id})
 
-    if project_alias
-      project_id = project_alias.project_id
+  begin
+    if project_id == 0 and issue_id != 0
+      begin
+        project_id = get_project_id_by_project_name_and_issue_subject_or_id(issue_id, project_name)
+      rescue Exception => e
+          puts e
+      end
+    else
+      first = Project.first(:conditions => {:name => project_name})
+      project_id = first.id unless first.nil?
     end
+  rescue Exception => e
+    puts e
   end
-  # ===> if that has a value, we know that we have a project alias for that project and there should be no reason to look into this project name any further, as we know that it is valid now
-  if project_id == 0
-    project = Project.find(:first, :conditions=>{:name => project_name})
-    if project
-      project_id = project.id
-    end
-  end
-  # <=== if that has a value, we know...
+
   project_id
 end
