@@ -840,7 +840,7 @@ def get_project_id(user_id, project_name, event_guid, issue_id)
       rescue Exception => e
           puts e
       end
-    else
+    elsif project_id == 0
       first = Project.first(:conditions => {:name => project_name})
       project_id = first.id unless first.nil?
     end
