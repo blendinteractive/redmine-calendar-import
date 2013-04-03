@@ -162,7 +162,7 @@ def translate_event(event, user_id, calendar_id)
           begin
             log_time_entry(user_id, calendar_id, event_guid, minutes_assigned, issue_id, issue_description, project_id, start_date)
           rescue Exception => e
-f            debug('Error logging a time entry: '+ e.to_s, __LINE__, __FILE__)
+            debug('Error logging a time entry: '+ e.to_s, __LINE__, __FILE__)
           end
         end
       end
@@ -826,9 +826,8 @@ end
 
 def get_project_id(user_id, project_name, event_guid, issue_id)
   project_id=0
-
-
-  project_alias = UserToProjectMapping.first(:conditions=>{:project_alias=>project_name, :event_guid=>event_guid, :user_id=>user_id})
+  #project_alias = UserToProjectMapping.first(:conditions=>{:project_alias=>project_name, :event_guid=>event_guid, :user_id=>user_id})
+  project_alias = UserToProjectMapping.find(:first, :conditions=>{:project_alias=>project_name, :user_id=>user_id})
 
   if project_alias
     project_id = project_alias.project_id
