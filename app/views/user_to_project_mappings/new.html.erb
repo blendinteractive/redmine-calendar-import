@@ -3,12 +3,12 @@
 
 <%= error_messages_for @user_to_project_mapping %>
 
-<% form_for(@user_to_project_mapping) do |f| %>
-<%= f.hidden_field :user_id %>
-<%= f.hidden_field :event_guid %>
+<%= form_for(@user_to_project_mapping) do |f| %>
+  <%= f.hidden_field :user_id %>
+  <%= f.hidden_field :event_guid %>
 
-<b>Project Name</b><br />
-<%= select_tag 'project', options_for_select(@projects), :multiple => false, :size => 20 %>
+  <b>Project Name</b><br />
+  <%= select_tag 'project', options_for_select(@projects), :multiple => false, :size => 20 %>
 
   <p>
     <b>Project Alias</b><br />
@@ -16,14 +16,14 @@
   </p>
 
     <% if @user_to_project_mapping.event_guid %>
-  <p>
-    <b>Use this alias...</b>
+      <p>
+      <b>Use this alias...</b>
 
-    <%= select_tag "use_alias", options_for_select([ "for all time entries.", "for only this one time entry."], "for all time entries.") %>
+      <%= select_tag "use_alias", options_for_select([ "for all time entries.", "for only this one time entry."], "for all time entries.") %>
 
 
-  </p>
-  <% end %>
+      </p>
+    <% end %>
 
   <p>
     <%= f.submit "Create" %>

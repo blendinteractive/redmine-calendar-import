@@ -18,9 +18,10 @@
             <% end %>
         </td>
         <td><%= link_to 'Show', :controller => "user_calendars", :id => user_calendar, :action => "show" %></td>
-        <td><%= link_to 'Delete', :controller => "user_calendars", :id => user_calendar, :confirm => 'Are you absolutely sure?', :action => :destroy %></td>
+        <td><%= link_to 'Delete', "user_calendars/#{user_calendar.id}", :id => user_calendar, method: :delete, data: { confirm: 'Are you sure?' }  %></td>
       </tr>
     <% end %>
     </table>
 
 </div>
+

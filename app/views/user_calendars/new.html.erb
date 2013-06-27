@@ -1,12 +1,18 @@
-<h1>New user_calendar</h1>
+<h1>New Calendar</h1>
 
 <%= error_messages_for @user_calendar %>
 
-<% form_for(@user_calendar) do |f| %>
+<%= form_for(@user_calendar) do |f| %>
   <p>
-    <b>User</b><br />
+    <b>User Name</b><br />
     <%= f.text_field :user_id %>
   </p>
+  
+  <p>
+    <b>Calendar Name</b><br />
+    <%= f.text_field :name %></td>
+  </p>
+    
 
   <p>
     <b>Ics file</b><br />

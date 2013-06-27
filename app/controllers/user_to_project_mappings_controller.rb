@@ -103,7 +103,6 @@ class UserToProjectMappingsController < ApplicationController
         format.html { redirect_to(url_for :controller => "calendar_imports", :action => "index") }
 
       else
-      
         @projects = {}
         @projects_objects = Project.find(:all, :order=>"name")
 
@@ -134,7 +133,10 @@ class UserToProjectMappingsController < ApplicationController
         format.html { redirect_to(url_for :controller => "calendar_imports", :action => "index") }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        if @user_to_project_mapping.project_alias == ''
+          flash[:error] = "The project alias cannot be blank!"
+        end
+        format.html { render(:action => "edit") }
         format.xml  { render :xml => @user_to_project_mapping.errors, :status => :unprocessable_entity }
       end
     end

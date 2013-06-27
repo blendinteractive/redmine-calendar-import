@@ -22,7 +22,7 @@ class Calendar
     #make all of the functions protected
     protected
     #this can be it's own module if need be
-    include Icalendar # Probably do this in your class to limit namespace overlap
+    #include Icalendar # Probably do this in your class to limit namespace overlap
     cal_file=''
     # Open a file or pass a string to the parser
     

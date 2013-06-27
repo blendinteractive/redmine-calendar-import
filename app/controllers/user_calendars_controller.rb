@@ -67,11 +67,16 @@ class UserCalendarsController < ApplicationController
   def create
     @user_calendar = UserCalendar.new(params[:user_calendar])
 
-    @user_calendar.save
-    flash[:notice] = "The calendar #{@user_calendar.name} was successfully created."
-    redirect_to(url_for :controller => "calendar_imports", :action => "index")
-
-
+    respond_to do |format|
+      if @user_calendar.save
+        format.html { redirect_to (url_for :controller => "calendar_imports", :action => "index"), notice: "The calendar '#{@user_calendar.name}' was successfully created." }
+        format.json { render json: @user_calendar, status: :created, location: @user_calendar }
+      else
+        format.html { render action: "new" }
+        flash[:error] = "The calendar '#{@user_calendar.name}' was not created. UserID: #{@user_calendar.user_id}" 
+        format.json { render json: @user_calendar.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PUT /user_calendars/1

@@ -22,7 +22,7 @@
                         X
                 <%      end
                     end %></td>
-            <td><%= link_to 'Edit', edit_user_to_project_mapping_path(user_to_project_mapping, :event_guid => user_to_project_mapping.event_guid) %></td>
+            <td><%= link_to 'Edit', edit_alias_path(user_to_project_mapping) %></td>
             <td><%= link_to 'Remove', user_to_project_mapping_path(user_to_project_mapping), :confirm => 'Are you sure?', :method => :delete %></td>
             </tr>
         <% else %>

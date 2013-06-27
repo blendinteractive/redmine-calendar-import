@@ -1,8 +1,8 @@
 <br />
 
 
-<% form_for user_calendar do |f| %>
-    <%= f.hidden_field :user_id %>
+<%= form_for(@user_calendar) do |f| %>
+    <%= f.hidden_field :user_id, :value => @user.id %>
 
 
 <table>

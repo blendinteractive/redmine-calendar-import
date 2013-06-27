@@ -29,7 +29,6 @@ if (ARGV.length < 1)
 
     user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
     user_list = User.find_all_by_id(user_ids)
-
     # ===> each user with an ICS file to import
     user_list.each do |user|
         puts "Starting user: #{user.login}"

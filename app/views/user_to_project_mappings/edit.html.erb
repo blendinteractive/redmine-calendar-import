@@ -1,8 +1,9 @@
 <h1>Editing Project Alias for <%= @selected_project %></h1>
 
-<%= error_messages_for :user_to_project_mapping %>
+
+
 <br />
-<% form_for(@user_to_project_mapping) do |f| %>
+<%= form_for(@user_to_project_mapping) do |f| %>
     <%= f.hidden_field :user_id %>
     <%= f.hidden_field :event_guid %>
     <%= f.hidden_field :project_id %>
@@ -16,7 +17,7 @@
    <% if FALSE %>
   <p>
     <b>Use this alias...</b>
-    <%= select_tag "use_alias", options_for_select([ "for all time entries.", "for only this one time entry."], "for all time entries.") %>
+    <%= select_tag "use_alias", options_for_select([[ "for all time entries.", 1], ["for only this one time entry.", 2]], 1) %>
 
   </p>
   <% end %>
