@@ -22,7 +22,6 @@ def process_event_issue_list(calendar_id, description, end_date, event_guid, eve
   minute_hash={}
   issue_hash={}
   error_hash={}
-
   if event_issue_list
     if event_issue_list.size > 0
       begin
@@ -44,6 +43,7 @@ def process_event_issue_list(calendar_id, description, end_date, event_guid, eve
 
     end
   end
+
   return issue_hash, minute_hash
 end
 
@@ -84,7 +84,6 @@ def translate_event(event, user_id, calendar_id)
   event_guid = Digest::MD5.hexdigest(event.uid+event.sequence.to_s)
   skipped_entries = ''
 
-
   #break the string on the # symbol !!IMPORTANT - leave the # on the front for later (may have to make my own function)
   begin
     event_issue_list, skipped_entries = return_issues(description)
@@ -122,7 +121,6 @@ def translate_event(event, user_id, calendar_id)
         if !(issue_id =~ /^[0-9]+$/)
           project_id = get_project_id(user_id, project_name, event_guid, issue_id)
           found_issue_id = find_issue(issue_id, project_id)
-
           if found_issue_id
             returned_issue_id = found_issue_id
           else
@@ -267,7 +265,7 @@ def return_issues(description)
   skipped_entry = ''
 
   if description
-    description.each do |line|
+    description.each_line do |line|
       if line.starts_with?('#')
         new_issue= TRUE
         issues_started = TRUE

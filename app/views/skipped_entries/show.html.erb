@@ -1,4 +1,4 @@
-
+<h1>Skipped Entry Details</h1>
 <p>
   <b>Calendar:</b>
   <%=h UserCalendar.find(@skipped_entry.calendar_id).name %>
@@ -16,15 +16,15 @@
 
 
 <p>
-  <b>Description:</b>
-  <%= simple_format(@skipped_entry.description) %>
+  <b>Description: </b>
+  <%= @skipped_entry.description %>
 </p>
 
 <p>
   <b>Text that was skipped:</b>
-  <%= simple_format(@skipped_entry.skipped_text) %>
+  <%= @skipped_entry.skipped_text %>
 </p>
 
 
 
-<%= link_to 'Back', :controller=>'calendar_imports', :action=>'index' %>
+<%= link_to 'Back', calendar_import_path %>

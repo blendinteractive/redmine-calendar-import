@@ -17,14 +17,21 @@
 
 
 RedmineApp::Application.routes.draw do
-  match 'calendar_import/:name', :to => 'calendar_imports#user_index'
-  match 'calendar_import/:name/pull', :to => 'calendar_imports#user_pull'
-  match 'user_calendars/show/:id', :to => 'user_calendars#show', :as => "show_user_calendar", :via => :get
-  match 'alias/edit/:id', :to => 'user_to_project_mappings#edit', :as => "edit_alias", :via => :get  
+  match 'calendar_import/:name' => 'calendar_imports#user_index'
+  match 'calendar_import/:name/pull' => 'calendar_imports#user_pull'
   match 'calendar_import' => 'calendar_imports#index'
-  match 'user_calendar', :to => 'user_calendars'
+  
+  match 'user_calendars/show/:id' => 'user_calendars#show', :as => "show_user_calendar", :via => :get
+  match 'user_calendar' => 'user_calendars'
+
+  match 'alias/edit/:id' => 'user_to_project_mappings#edit', :as => "edit_alias", :via => :get  
+  match 'skipped_entries/show/:id' => 'skipped_entries#show', :as => "show_skipped_entries", :via => :get  
+  
+  match 'errors/show/:id' => 'errors#show', :via => :get
+
+  resources :errors
   resources :user_calendars
   resources :user_to_project_mappings
   resources :event_to_issue_errors
-  resource :skipped_entry
+  #resources :skipped_entries
 end

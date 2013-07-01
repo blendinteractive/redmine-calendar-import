@@ -1,5 +1,5 @@
 module ImportProcessor
-    #require 'icalendar'
+    require '/Users/stephanie/.rbenv/versions/1.9.3-p429/lib/ruby/gems/1.9.1/gems/icalendar-1.4.1/lib/icalendar.rb'
     require 'open-uri'
     require File.expand_path(File.dirname(__FILE__) + '/open_uri.rb')
     require 'uri'
@@ -13,7 +13,7 @@ module ImportProcessor
     def self.process_calendar(user,calendar_object)
         calendar_read = TRUE
         three_months_ago = 12.months.ago.to_datetime
-        cutoff_date = DateTime.new(2013,6,1) #when we make this live we will set this to 5/1/2009 so that we'll start from then
+        cutoff_date = DateTime.new(2013,6,1) #when we make this live we will set this to 6/1/2013 so that we'll start from then
         process_time = DateTime.now
         
         #remove all entries using different ics files for this user from the processed_results table

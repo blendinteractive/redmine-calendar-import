@@ -22,6 +22,7 @@ class CalendarImportsController < ApplicationController
   def index
     @user = User.current
     @user_calendar = UserCalendar.new
+    @errors = Error.find(:all)
     #UserToProjectMapping.find(@user.id)
   end
 

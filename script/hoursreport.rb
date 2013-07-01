@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems' # Unless you install from the tarball or zip.
-basepath = File.dirname(__FILE__) + '/../../../../'
+basepath = File.dirname(__FILE__) + '/../../../'
 require basepath + 'config/boot'
 require basepath + 'config/environment'
 require 'date'

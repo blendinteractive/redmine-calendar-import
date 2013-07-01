@@ -6,14 +6,14 @@
     <% if @user != nil %>
         <div class="box">
         <h3>Calendars</h3>
-        <%= render :partial=>"user_calendar_list", :locals=>{:user_calendars=>@user.user_calendars} %>
+        <%= render :partial=>"user_calendar_list", :locals=>{:user_calendars => @user.user_calendars} %>
         <%= render :partial=>'new_user_calendar', :locals=>{:user_calendar => UserCalendar.new()} %>
         </div>
     <% end %>
 
 	 <div class="box">
         <h3>Project Aliases</h3>
-			<%= render :partial=>"user_to_project_mappings_list", :locals=>{:user_to_project_mappings=>@user.user_to_project_mappings} %>
+			<%= render :partial=>"user_to_project_mappings_list", :locals=>{:user_to_project_mappings => @user.user_to_project_mappings} %>
         </div>
 
 </div>
@@ -22,7 +22,7 @@
 
         <div class="box">
         <h3>Import Errors</h3>
-			<%= render :partial=>"event_to_issue_errors_list", :locals=>{:event_to_issue_errors=>@user.event_to_issue_errors.find(:all, :conditions => ["start_date > ?", 2.months.ago ])} %>
+			<%= render :partial=>"event_to_issue_errors_list", :locals=>{:event_to_issue_errors => @user.event_to_issue_errors.find(:all, :conditions => ["start_date > ?", 2.months.ago ]), :error => @errors} %>
         </div>
 		
 		<%= render :partial=>"skipped_entries_list", :locals=>{:skipped_entries=>@user.skipped_entries.find(:all, :conditions => ["start_date > ?", 2.months.ago ])} %>

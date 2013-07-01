@@ -1,3 +1,5 @@
+<% %>
+<h1>Entry Error Details</h1>
 <p>
   <b>Calendar:</b>
   <%=h UserCalendar.find(@event_to_issue_error.calendar_id).name %>
@@ -15,12 +17,12 @@
 
 <p>
   <b>Time Entries:</b>
-  <%= simple_format(@event_to_issue_error.description) %>
+  <%= @event_to_issue_error.description %>
 </p>
 
 <p>
   <b>Error:</b>
-  <%=h Error.find(@event_to_issue_error.error_id).description %>
+  <%=h @description %>
 </p>
 
 

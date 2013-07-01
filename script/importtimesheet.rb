@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'rubygems' # Unless you install from the tarball or zip.
-basepath = File.dirname(__FILE__) + '/../../../../'
+basepath = File.dirname(__FILE__) + '/../../../'
 require basepath + 'config/boot'
 require basepath + 'config/environment'
 require 'date'
@@ -27,7 +27,8 @@ if (ARGV.length < 1)
     three_months_ago = 12.months.ago.to_datetime
     make_archived(three_months_ago, 'date')
 
-    user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
+    #user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
+    user_ids = UserCalendar.find_by_sql(["SELECT * FROM user_calendars WHERE (user_calendars.user_id = 489)"]).collect(&:user_id)
     user_list = User.find_all_by_id(user_ids)
     # ===> each user with an ICS file to import
     user_list.each do |user|
