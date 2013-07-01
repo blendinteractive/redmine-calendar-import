@@ -27,9 +27,6 @@ RedmineApp::Application.routes.draw do
   match 'alias/edit/:id' => 'user_to_project_mappings#edit', :as => "edit_alias", :via => :get  
   match 'skipped_entries/show/:id' => 'skipped_entries#show', :as => "show_skipped_entries", :via => :get  
   
-  match 'errors/show/:id' => 'errors#show', :via => :get
-
-  resources :errors
   resources :user_calendars
   resources :user_to_project_mappings
   resources :event_to_issue_errors
