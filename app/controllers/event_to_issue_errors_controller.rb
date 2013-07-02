@@ -25,7 +25,6 @@ class EventToIssueErrorsController < ApplicationController
   # GET /event_to_issue_errors.xml
   def index
     @event_to_issue_errors = EventToIssueError.find(:all, :conditions => ["start_date > ?", 2.months.ago ])
-    @error_description = "***** TESTING *****"
     
     respond_to do |format|
       format.html # index.html.erb
@@ -37,7 +36,7 @@ class EventToIssueErrorsController < ApplicationController
   # GET /event_to_issue_errors/1.xml
   def show
     @event_to_issue_error = EventToIssueError.find(params[:id])
-    @description = Error.find(@event_to_issue_error.error_id).description
+    @error_description = Error.find(@event_to_issue_error.error_id).description
 =begin
     description = @event_to_issue_error.description
 
