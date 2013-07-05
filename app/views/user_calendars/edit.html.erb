@@ -1,32 +1,23 @@
-<h1>Editing user_calendar</h1>
+<h1>Edit Calendar Name</h1>
 
-<%= error_messages_for :user_calendar %>
+<%= error_messages_for @user_calendar %>
 
 <%= form_for(@user_calendar) do |f| %>
+  <%= f.hidden_field :user_id, :value => @user_calendar.user_id %>
   <p>
-    <b>User</b><br />
-    <%= f.text_field :user_id %>
+    <b>Calendar Name</b><br />
+    <%= f.text_field :name %>
   </p>
 
   <p>
     <b>Ics file</b><br />
-    <%= f.text_field :ics_file %>
-  </p>
-
-  <p>
-    <b>HTTP User</b><br />
-    <%= f.text_field :http_user %>
-  </p>
-
-  <p>
-    <b>HTTP Password</b><br />
-    <%= f.text_field :http_password %>
+    <%= @user_calendar.ics_file %>
   </p>
   
   <p>
-    <%= f.submit "Update" %>
+    <%= f.submit "Update"%>
   </p>
 <% end %>
 
-<%= link_to 'Show', @user_calendar %> |
-<%= link_to 'Back', user_calendars_path %>
+<%= link_to 'Show', show_user_calendar_path %> |
+<%= link_to 'Back', calendar_import_path %>

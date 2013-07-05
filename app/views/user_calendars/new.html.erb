@@ -3,14 +3,12 @@
 <%= error_messages_for @user_calendar %>
 
 <%= form_for(@user_calendar) do |f| %>
-  <p>
-    <b>User Name</b><br />
-    <%= f.text_field :user_id %>
-  </p>
+    <%= f.hidden_field :user_id %>
+
   
   <p>
     <b>Calendar Name</b><br />
-    <%= f.text_field :name %></td>
+    <%= f.text_field :name, :autofocus => true %></td>
   </p>
     
 

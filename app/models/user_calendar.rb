@@ -18,7 +18,9 @@
 class UserCalendar < ActiveRecord::Base
     belongs_to :user
     validates_presence_of :user_id
-    validates_uniqueness_of :ics_file, :message=>'This ics file has already been used. (by you or someone else)'
+    validates_presence_of :name, :message => ': Calendar name cannot be blank'
+    validates_presence_of :ics_file, :message => ': An ics file must be given'
+    validates_uniqueness_of :ics_file, :message=>': This ics file has already been used. (by you or someone else)'
 
     
     has_many :script_created_issues, :foreign_key => 'user_calendar_id', :dependent => :delete_all

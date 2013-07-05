@@ -1,6 +1,6 @@
 <h1>Editing Project Alias for <%= @selected_project %></h1>
 
-
+<%= error_messages_for @user_to_project_mapping %>
 
 <br />
 <%= form_for(@user_to_project_mapping) do |f| %>
@@ -11,7 +11,7 @@
 
   <p>
     <b>Project alias</b><br />
-    <%= f.text_field :project_alias %>
+    <%= f.text_field :project_alias, :autofocus => true %>
   </p>
 
    <% if FALSE %>

@@ -22,9 +22,6 @@ RedmineApp::Application.routes.draw do
   match 'calendar_import' => 'calendar_imports#index'
   
   match 'user_calendars/show/:id' => 'user_calendars#show', :as => "show_user_calendar", :via => :get
-  match 'user_calendar' => 'user_calendars'
-
-  match 'alias/edit/:id' => 'user_to_project_mappings#edit', :as => "edit_alias", :via => :get  
   match 'skipped_entries/show/:id' => 'skipped_entries#show', :as => "show_skipped_entries", :via => :get  
   
   resources :user_calendars

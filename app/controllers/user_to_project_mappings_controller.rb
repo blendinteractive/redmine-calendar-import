@@ -73,17 +73,14 @@ class UserToProjectMappingsController < ApplicationController
 
   # GET /user_to_project_mappings/1/edit
   def edit
-  
     @user_to_project_mapping = UserToProjectMapping.find(params[:id])
-    
+
     if params[:event_guid]
         @user_to_project_mapping.event_guid = params[:event_guid]
     end
 
     @projects = Project.find(:all, :order=>"name")
     @selected_project = Project.find(@user_to_project_mapping.project_id).name
-
-
   end
 
   # POST /user_to_project_mappings
@@ -121,8 +118,7 @@ class UserToProjectMappingsController < ApplicationController
   # PUT /user_to_project_mappings/1.xml
   def update
     @user_to_project_mapping = UserToProjectMapping.find(params[:id])
-
-    
+        
     if params[:use_alias] == 'for all time entries.'
         @user_to_project_mapping.event_guid = '';
     end
@@ -133,10 +129,9 @@ class UserToProjectMappingsController < ApplicationController
         format.html { redirect_to(url_for :controller => "calendar_imports", :action => "index") }
         format.xml  { head :ok }
       else
-        if @user_to_project_mapping.project_alias == ''
-          flash[:error] = "The project alias cannot be blank!"
-        end
-        format.html { render(:action => "edit") }
+        @projects = Project.find(:all, :order=>"name")
+        @selected_project = Project.find(@user_to_project_mapping.project_id).name #declared here for render "edit" to display selected_project.name
+        format.html { render :action => "edit" }
         format.xml  { render :xml => @user_to_project_mapping.errors, :status => :unprocessable_entity }
       end
     end

@@ -60,6 +60,7 @@ class UserCalendarsController < ApplicationController
   # GET /user_calendars/1/edit
   def edit
     @user_calendar = UserCalendar.find(params[:id])
+    
   end
 
   # POST /user_calendars
@@ -72,8 +73,8 @@ class UserCalendarsController < ApplicationController
         format.html { redirect_to (url_for :controller => "calendar_imports", :action => "index"), notice: "The calendar '#{@user_calendar.name}' was successfully created." }
         format.json { render json: @user_calendar, status: :created, location: @user_calendar }
       else
-        format.html { render action: "new" }
-        flash[:error] = "The calendar '#{@user_calendar.name}' was not created. UserID: #{@user_calendar.user_id}" 
+        @user = User.current
+        format.html { render "new" }
         format.json { render json: @user_calendar.errors, status: :unprocessable_entity }
       end
     end
@@ -86,8 +87,8 @@ class UserCalendarsController < ApplicationController
 
     respond_to do |format|
       if @user_calendar.update_attributes(params[:user_calendar])
-        flash[:notice] = 'UserCalendar was successfully updated.'
-        format.html { redirect_to(@user_calendar) }
+        flash[:notice] = "'#{@user_calendar.name}' was successfully updated."
+        format.html { redirect_to(calendar_import_path) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
