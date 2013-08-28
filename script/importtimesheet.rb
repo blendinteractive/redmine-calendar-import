@@ -28,7 +28,7 @@ if (ARGV.length < 1)
     make_archived(three_months_ago, 'date')
 
     user_ids = UserCalendar.find_by_sql(["SELECT DISTINCT(user_id) FROM user_calendars"]).collect(&:user_id)
-    #user_ids = UserCalendar.find_by_sql(["SELECT * FROM user_calendars WHERE (user_calendars.user_id = 489)"]).collect(&:user_id)
+    #user_ids = UserCalendar.find_by_sql(["SELECT * FROM user_calendars WHERE (user_calendars.user_id = 489)"]).collect(&:user_id) //For testing purposes
     user_list = User.find_all_by_id(user_ids)
     # ===> each user with an ICS file to import
     user_list.each do |user|
